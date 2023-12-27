@@ -6,7 +6,7 @@ const config = {
 	version: '0.1.1',
 	debug: false,
 	game: {
-		name: 'CTFBourgPalette',
+		name: 'Cat-Club',
 		quests: {
 			ERGBHJ98: {
 				level: 1,
@@ -17,11 +17,11 @@ const config = {
 				orderFix: false,
 				imsiHandler: false,
 				goalOrder: {
-					id3: { optional: true, break: true, dialog: [ 'Welcome to my city! Do you need some help ?', 'Oh yes! The neighbourhood is really nice and quiet. I used to walk around here and enjoy my time.', 'Only once I heard someone shout "123456789". I didn\'t understand why...', 'Well, see you later.' ] },
+					id3: { optional: true, break: true, dialog: ['Welcome to my city! Do you need some help ?', 'Oh yes! The neighbourhood is really nice and quiet. I used to walk around here and enjoy my time.', 'Only once I heard someone shout "123456789". I didn\'t understand why...', 'Well, see you later.'] },
 					id10: {
 						break: true,
 						dialog: [
-							'Welcome to CTFBourgPalette! Are you here to practice your hacking skills ?',
+							'Welcome to Cat-Club! Are you here to practice your hacking skills ?',
 							'Amazing! This is for you. I\'m curious to know if you are more black hat or white hat.',
 							'Your choices will define it. Enjoy!',
 						],
@@ -39,7 +39,7 @@ const config = {
 				orderFix: false,
 				imsiHandler: false,
 				goalOrder: {
-					id3: { optional: true, break: true, dialog: [ 'Welcome to my city! Do you need some help ?', 'Oh yes! The neighbourhood is really nice and quiet. I used to walk around here and enjoy my time.', 'Only once I heard someone shout "123456789". I didn\'t understand why...', 'Well, see you later.' ] },
+					id3: { optional: true, break: true, dialog: ['Welcome to my city! Do you need some help ?', 'Oh yes! The neighbourhood is really nice and quiet. I used to walk around here and enjoy my time.', 'Only once I heard someone shout "123456789". I didn\'t understand why...', 'Well, see you later.'] },
 					id19: { optional: true, computerScreen: true, computerMode: 'photogram' },
 					phone: { method: 'wifi', name: 'ZOULOUFAMILY' },
 				},
@@ -50,11 +50,11 @@ const config = {
 				title: 'Quest 3',
 				desc: 'Get the list of devices on your current network and find how to exploit one of them. Enter the flag you think valid in the menu "Enter a flag".',
 				map: '',
-				wifiKnow: [ 'ZOULOUFAMILY' ],
+				wifiKnow: ['ZOULOUFAMILY'],
 				orderFix: false,
 				imsiHandler: false,
 				goalOrder: {
-					id6: { optional: true, break: true, dialog: [ 'Hey man, do you know where Sara is? I\'ve been waiting for her for so long now!'] },
+					id6: { optional: true, break: true, dialog: ['Hey man, do you know where Sara is? I\'ve been waiting for her for so long now!'] },
 					phone: { method: 'aim', name: 'AOKZC3O2' },
 					id19: { optional: true, computerScreen: true, computerMode: 'photogram' },
 				},
@@ -65,11 +65,11 @@ const config = {
 				title: 'Quest 4',
 				desc: 'It\'s time to play with the password. Find a computer to log in to the account whose credentials you just obtained and try to find a flag.',
 				map: '',
-				wifiKnow: [ 'ZOULOUFAMILY' ],
+				wifiKnow: ['ZOULOUFAMILY'],
 				orderFix: false,
 				imsiHandler: false,
 				goalOrder: {
-					id8: { optional: true, break: true, dialog: [ 'Oh, you just got that password. Congrats.', 'You should try to connect with it.', 'But be careful, PhotoGram is a really good databroker.' ] },
+					id8: { optional: true, break: true, dialog: ['Oh, you just got that password. Congrats.', 'You should try to connect with it.', 'But be careful, PhotoGram is a really good databroker.'] },
 					id19: { break: true, computerScreen: true, computerMode: 'photogram' },
 				},
 				success: 'Success. You get a credit card.',
@@ -79,12 +79,12 @@ const config = {
 				title: 'Quest 5',
 				desc: 'Buy a IMSI-catcher and place it on a strategic point in the city. Then wait for data !',
 				map: '',
-				wifiKnow: [ 'ZOULOUFAMILY' ],
+				wifiKnow: ['ZOULOUFAMILY'],
 				orderFix: true,
 				imsiHandler: false,
 				goalOrder: {
-					id3: { break: true, dialog: [ 'I see, you want my spy tool after all ?', 'Oh you\'ve got a credit card, ok let\'s proceed with the transaction.', 'If you want to try it, place it on a tall object like the Eiffel Tower, a construction crane or even a street lamp.' ] },
-					id20: { break: true, dialog: [ 'You have successfully hidden your IMSI-catcher' ] },
+					id3: { break: true, dialog: ['I see, you want my spy tool after all ?', 'Oh you\'ve got a credit card, ok let\'s proceed with the transaction.', 'If you want to try it, place it on a tall object like the Eiffel Tower, a construction crane or even a street lamp.'] },
+					id20: { break: true, dialog: ['You have successfully hidden your IMSI-catcher'] },
 					id19: { optional: true, computerScreen: true, computerMode: 'photogram' },
 				},
 				success: 'Success',
@@ -94,7 +94,7 @@ const config = {
 				title: 'Quest 6',
 				desc: 'Look at the data you get and try to see if there is something you can use!',
 				map: '',
-				wifiKnow: [ 'ZOULOUFAMILY' ],
+				wifiKnow: ['ZOULOUFAMILY'],
 				orderFix: true,
 				imsiHandler: true,
 				goalOrder: {
@@ -108,7 +108,7 @@ const config = {
 				title: 'Quest 7',
 				desc: 'Return to talk to Professor H.',
 				map: '',
-				wifiKnow: [ 'ZOULOUFAMILY' ],
+				wifiKnow: ['ZOULOUFAMILY'],
 				orderFix: true,
 				imsiHandler: true,
 				goalOrder: {
@@ -221,9 +221,9 @@ const config = {
 				actif: true,
 				name: 'ZOULOUFAMILY',
 				pwd: '123456789',
-				coord: [ 941, 617 ],
+				coord: [941, 617],
 				devices: [
-					{ name: 'Michel\'s musicPod', proba: 4, ip: '192.168.50.18', type: 'music', credentials: [ 'Michelle - The Beatles', 'Til I Fell in Love with You - Bob Dylan', 'Daft Punk - Random Access Memories' ] },
+					{ name: 'Michel\'s musicPod', proba: 4, ip: '192.168.50.18', type: 'music', credentials: ['Michelle - The Beatles', 'Til I Fell in Love with You - Bob Dylan', 'Daft Punk - Random Access Memories'] },
 					{ name: 'Sara\'s phone', proba: 3, ip: '192.168.50.152', type: 'navigation', actif: true, credentials: 'AOKZC3O2', probaCredential: 2 },
 					{ name: 'Computer 1', proba: 2, ip: '192.168.50.78', type: 'navigation', actif: false },
 					{ name: 'Computer 2', proba: 2, ip: '192 .168.50.129', type: 'navigation', actif: true },
@@ -231,15 +231,15 @@ const config = {
 				],
 			}, {
 				actif: true,
-  			name: 'TP-LINK_4C50',
-  			pwd: 'IHOSDIFH8374@',
-  			coord: [ 1737, 888 ],
-  		}, {
+				name: 'TP-LINK_4C50',
+				pwd: 'IHOSDIFH8374@',
+				coord: [1737, 888],
+			}, {
 				actif: true,
-  			name: 'SSID-98765432',
-  			pwd: '23456SUDQHM+',
-  			coord: [ 89, 364 ],
-  		},
+				name: 'SSID-98765432',
+				pwd: '23456SUDQHM+',
+				coord: [89, 364],
+			},
 		],
 	},
 };

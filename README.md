@@ -1,8 +1,8 @@
-# CTF BourgPalette
+# Cat Club
 
 A pokemon-like project game where you level up by hacking your neighbor. 
 
-You play as a new hacker. You are not trying to capture all the pokemons but to capture all the flags! CTF is for Capture the Flag, a famous term in cybersecurity where you can try to figure out how to infiltrate and exploit on a simulation ecosystem. It's the same in CTFBourgPalette.
+You play as a new hacker. You are not trying to capture all the pokemons but to capture all the flags! CTF is for Capture the Flag, a famous term in cybersecurity where you can try to figure out how to infiltrate and exploit on a simulation ecosystem. It's the same in Cat-Club.
 
 Built during the Secureworks Cybersecurity Literacy Challenge 2022.
 
@@ -22,7 +22,7 @@ Built during the Secureworks Cybersecurity Literacy Challenge 2022.
 
 #### Dependencies
 
-Before running CTF BourgPalette the following dependencies need to be installed.
+Before running Cat Club the following dependencies need to be installed.
 
 | Dependencies | Version |
 | ------------ | ------- |
@@ -32,8 +32,8 @@ Before running CTF BourgPalette the following dependencies need to be installed.
 ### Installation and launch
 
 ```bash
-$ git clone https://github.com/VBoureaud/CTFBourgPalette.git
-$ cd CTFBourgPalette
+$ git clone https://github.com/VBoureaud/Cat-Club.git
+$ cd Cat-Club
 $ npm install
 $ npm start
 ```

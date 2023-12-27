@@ -45,7 +45,7 @@ function NavBar(props: NavBarType) {
 		<div style={styles.header}>
       <div style={styles.headerContainer}>
         <span style={{ display: "flex", flexDirection: 'row', alignItems: 'center', lineHeight: '15px' }}>
-          <Title style={{ color: 'white', margin: '5px', fontSize: '13px', textShadow: '1px 1px #7b4b00', fontStyle: 'italic' }}>CTFBourgPalette</Title>
+          <Title style={{ color: 'white', margin: '5px', fontSize: '13px', textShadow: '1px 1px #7b4b00', fontStyle: 'italic' }}>Cat-Club</Title>
         </span>
         <div onClick={() => props && props.onClick && props.onClick()} style={styles.rightHeader}>
           <p className="btnBox nes-btn is-primary" style={{ padding: '0 10px' }}>

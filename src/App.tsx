@@ -289,7 +289,7 @@ function App() {
 
     const creditMenu = (
       <>
-        <a href="https://github.com/VBoureaud/CTFBourgPalette">README</a>
+        <a href="https://github.com/VBoureaud/Cat-Club">README</a>
         <p style={{ marginTop: '15px' }} onClick={() => setStepMenu(enumMenu.init)}>BACK</p>
       </>
     )
