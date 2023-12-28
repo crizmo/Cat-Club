@@ -1,8 +1,10 @@
 import Phaser from 'phaser'
+import io from 'socket.io-client'
 
 export class BaseScene extends Phaser.Scene {
 
   movable = true;
+  players = {};  // Add this line
 
   // --------------------------------------------------------------------------------------------------
   // CREATE
@@ -10,6 +12,36 @@ export class BaseScene extends Phaser.Scene {
     // ----------------
     // MAP AND TILESET
     this.map = this.make.tilemap({key: tilemapKey});
+
+     // socket connection
+     this.socket = io('http://localhost:3001');
+     this.socket.on('connect', () => {
+       console.log('connected to server');
+     });
+     this.socket.on('disconnect', () => {
+       console.log('disconnected from server');
+     });
+ 
+     // Listen for new player event
+     this.socket.on('newPlayer', (playerInfo) => {
+       this.players[playerInfo.id] = this.add.sprite(playerInfo.position.x, playerInfo.position.y, "player");
+     });
+ 
+     // Listen for player moved event
+     this.socket.on('playerMoved', (playerInfo) => {
+       if (this.players[playerInfo.id]) {
+         this.players[playerInfo.id].x = playerInfo.position.x;
+         this.players[playerInfo.id].y = playerInfo.position.y;
+       }
+     });
+ 
+     // Listen for user disconnected event
+     this.socket.on('userDisconnected', (id) => {
+       if (this.players[id]) {
+         this.players[id].destroy();
+         delete this.players[id];
+       }
+     });
 
     //const tileset = this.map.addTilesetImage("tileset", "TilesetImage");
     // With added margin and spacing for the extruded image:
@@ -32,6 +64,9 @@ export class BaseScene extends Phaser.Scene {
     
     // Create the player and the player animations (see player.js)
     this.player = this.add.player(spawnPoint.x, spawnPoint.y, "atlas", "ariel-front")
+    // lets push the player to the server
+    this.socket.emit('newPlayer', { x: spawnPoint.x, y: spawnPoint.y, id: this.socket.id });
+ 
 
     // ----------------
     // CAMERA AND CURSORS
@@ -156,6 +191,11 @@ export class BaseScene extends Phaser.Scene {
 
     // Update player velocity and animation
     this.player.update(moveleft, moveright, moveup, movedown);
+
+    // Emit player move event
+    if (moveleft || moveright || moveup || movedown) {
+      this.socket.emit('playerMove', { x: this.player.x, y: this.player.y });
+    }
 
     // ---------------------
     // INTERACTIVE OBJECTS
