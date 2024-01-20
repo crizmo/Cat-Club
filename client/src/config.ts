@@ -7,6 +7,9 @@ const config = {
 	debug: false,
 	game: {
 		name: 'Cat-Club',
+		socket: {
+			url: 'http://localhost:3001',
+		},
 		quests: {
 			ERGBHJ98: {
 				level: 1,

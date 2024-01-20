@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
-import io from 'socket.io-client'
+
+import socket from '../socket';
 
 export class BaseScene extends Phaser.Scene {
 
@@ -11,37 +12,52 @@ export class BaseScene extends Phaser.Scene {
   create(tilemapKey) {
     // ----------------
     // MAP AND TILESET
-    this.map = this.make.tilemap({key: tilemapKey});
+    this.map = this.make.tilemap({ key: tilemapKey });
 
-     // socket connection
-     this.socket = io('http://localhost:3001');
-     this.socket.on('connect', () => {
-       console.log('connected to server');
-     });
-     this.socket.on('disconnect', () => {
-       console.log('disconnected from server');
-     });
- 
-     // Listen for new player event
-     this.socket.on('newPlayer', (playerInfo) => {
-       this.players[playerInfo.id] = this.add.sprite(playerInfo.position.x, playerInfo.position.y, "player");
-     });
- 
-     // Listen for player moved event
-     this.socket.on('playerMoved', (playerInfo) => {
-       if (this.players[playerInfo.id]) {
-         this.players[playerInfo.id].x = playerInfo.position.x;
-         this.players[playerInfo.id].y = playerInfo.position.y;
-       }
-     });
- 
-     // Listen for user disconnected event
-     this.socket.on('userDisconnected', (id) => {
-       if (this.players[id]) {
-         this.players[id].destroy();
-         delete this.players[id];
-       }
-     });
+    // socket connection
+    // this.socket = io('http://localhost:3001');
+    this.socket = socket;
+    this.socket.on('connect', () => {
+      console.log('connected to server');
+    });
+    this.socket.on('disconnect', () => {
+      console.log('disconnected from server');
+    });
+
+    // Listen for new player event
+    this.socket.on('newPlayer', (playerInfo) => {
+      this.players[playerInfo.id] = this.add.sprite(playerInfo.position.x, playerInfo.position.y, "atlas", "ariel-front");
+    });
+
+    // Listen for player moved event
+    this.socket.on('playerMoved', (playerInfo) => {
+      if (this.players[playerInfo.id]) {
+        this.players[playerInfo.id].x = playerInfo.position.x;
+        this.players[playerInfo.id].y = playerInfo.position.y;
+
+        console.log(playerInfo.position);
+        // animate the player movements
+        if (playerInfo.position.movingLeft) {
+          this.players[playerInfo.id].anims.play("ariel-left-walk", true);
+        } else if (playerInfo.position.movingRight) {
+          this.players[playerInfo.id].anims.play("ariel-right-walk", true);
+        } else if (playerInfo.position.movingUp) {
+          this.players[playerInfo.id].anims.play("ariel-back-walk", true);
+        } else if (playerInfo.position.movingDown) {
+          this.players[playerInfo.id].anims.play("ariel-front-walk", true);
+        } else {
+          this.players[playerInfo.id].anims.stop();
+        }
+      }
+    });
+
+    // Listen for user disconnected event
+    this.socket.on('userDisconnected', (id) => {
+      if (this.players[id]) {
+        this.players[id].destroy();
+        delete this.players[id];
+      }
+    });
 
     //const tileset = this.map.addTilesetImage("tileset", "TilesetImage");
     // With added margin and spacing for the extruded image:
@@ -61,12 +77,12 @@ export class BaseScene extends Phaser.Scene {
     // PLAYER
     // Get the spawn point
     const spawnPoint = this.map.findObject("Objects", obj => obj.name === "Spawn Point");
-    
+
     // Create the player and the player animations (see player.js)
     this.player = this.add.player(spawnPoint.x, spawnPoint.y, "atlas", "ariel-front")
     // lets push the player to the server
     this.socket.emit('newPlayer', { x: spawnPoint.x, y: spawnPoint.y, id: this.socket.id });
- 
+
 
     // ----------------
     // CAMERA AND CURSORS
@@ -117,8 +133,8 @@ export class BaseScene extends Phaser.Scene {
   }
 
   // ---------------------------------------------------
-  resize (gameSize, baseSize, displaySize, resolution) {
-     this.cameras.resize(gameSize.width, gameSize.height);
+  resize(gameSize, baseSize, displaySize, resolution) {
+    this.cameras.resize(gameSize.width, gameSize.height);
   }
 
   collide_with_world() {
@@ -194,7 +210,10 @@ export class BaseScene extends Phaser.Scene {
 
     // Emit player move event
     if (moveleft || moveright || moveup || movedown) {
-      this.socket.emit('playerMove', { x: this.player.x, y: this.player.y });
+      // this.socket.emit('playerMove', { x: this.player.x, y: this.player.y });
+      this.socket.emit('playerMove', { x: this.player.x, y: this.player.y, movingLeft: moveleft, movingRight: moveright, movingUp: moveup, movingDown: movedown });
+    } else {
+      this.socket.emit('playerMove', { x: this.player.x, y: this.player.y, movingLeft: false, movingRight: false, movingUp: false, movingDown: false });
     }
 
     // ---------------------

@@ -29,17 +29,18 @@ io.on('connection', (socket) => {
 
         // Send existing players to the new player
         for (const playerId in players) {
-          if (playerId !== socket.id) {
-            socket.emit('newPlayer', { id: playerId, position: players[playerId] });
-          }
+            if (playerId !== socket.id) {
+                socket.emit('newPlayer', { id: playerId, position: players[playerId] });
+            }
         }
     });
 
     // Handle player movements
-    socket.on('playerMove', (position) => {
-        players[socket.id] = position;
+    // Handle player movements
+    socket.on('playerMove', (data) => {
+        players[socket.id] = data;
         // Broadcast the updated position to all other players
-        socket.broadcast.emit('playerMoved', { id: socket.id, position });
+        socket.broadcast.emit('playerMoved', { id: socket.id, position: data });
     });
 
     // Handle disconnections
