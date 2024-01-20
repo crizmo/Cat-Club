@@ -10,3 +10,5 @@
     - `npm install`
     - `npm start`
 
+# Status 
+Currently busy with college stuff , will work on it once free 
