@@ -1,21 +1,15 @@
-node_modules/
-node_modules/*
-.expo/
-.expo/*
-package-lock.json
-__pycache__/
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
-web-report/
-dist/
-
-tmp.txt
-
-# macOS
+# System and IDE files
+Thumbs.db
 .DS_Store
+.idea
+*.suo
+*.sublime-project
+*.sublime-workspace
+
+# Vendors
+node_modules/
+
+# Build
+dist/
+/npm-debug.log
+/server/config.js
