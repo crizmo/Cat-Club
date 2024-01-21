@@ -1,0 +1,13 @@
+{
+  "name": "littleroot",
+  "version": "0.1.0",
+  "description": "A RPG demo based on Pokemon Emerald using Phaser 3 and Socket.io.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1"
+  }
+}
