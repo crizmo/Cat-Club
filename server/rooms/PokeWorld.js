@@ -52,6 +52,13 @@ exports.PokeWorld = class extends colyseus.Room {
                 y: 75,
                 players: players
             })
+
+            // the issue rn is 
+            // lets say the first player goes to map 2 
+            // and then the second player goes to map 2 
+            // so the first player sees the second player
+            // but for the second player to see the first player he has to move
+
         }
     }
 

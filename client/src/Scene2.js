@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {onlinePlayers, room} from './SocketServer';
+import { onlinePlayers, room } from './SocketServer';
 
 import Player from "./Player";
 import OnlinePlayer from "./OnlinePlayer";
@@ -14,6 +14,7 @@ export class Scene2 extends Phaser.Scene {
     init(data) {
         // Map data
         this.mapName = data.map;
+        console.log('Map name:', this.mapName);
 
         // Player Texture starter position
         this.playerTexturePosition = data.playerTexturePosition;
@@ -24,28 +25,56 @@ export class Scene2 extends Phaser.Scene {
 
     create() {
         room.then((room) => room.onMessage((data) => {
-                if (data.event === 'CURRENT_PLAYERS') {
-                    console.log('CURRENT_PLAYERS');
+            if (data.event === 'CURRENT_PLAYERS') {
+                console.log('CURRENT_PLAYERS');
 
-                    Object.keys(data.players).forEach(playerId => {
-                        let player = data.players[playerId];
+                Object.keys(data.players).forEach(playerId => {
+                    let player = data.players[playerId];
 
-                        if (playerId !== room.sessionId) {
-                            onlinePlayers[player.sessionId] = new OnlinePlayer({
-                                scene: this,
-                                playerId: player.sessionId,
-                                key: player.sessionId,
-                                map: player.map,
-                                x: player.x,
-                                y: player.y
-                            });
-                        }
-                    })
+                    if (playerId !== room.sessionId) {
+                        onlinePlayers[player.sessionId] = new OnlinePlayer({
+                            scene: this,
+                            playerId: player.sessionId,
+                            key: player.sessionId,
+                            map: player.map,
+                            x: player.x,
+                            y: player.y
+                        });
+                    }
+
+                    console.log(`Player ${playerId} is in map ${player.map}`);
+                })
+            }
+            if (data.event === 'PLAYER_JOINED') {
+                console.log('PLAYER_JOINED');
+
+                if (!onlinePlayers[data.sessionId]) {
+                    onlinePlayers[data.sessionId] = new OnlinePlayer({
+                        scene: this,
+                        playerId: data.sessionId,
+                        key: data.sessionId,
+                        map: data.map,
+                        x: data.x,
+                        y: data.y
+                    });
                 }
-                if (data.event === 'PLAYER_JOINED') {
-                    console.log('PLAYER_JOINED');
+            }
+            if (data.event === 'PLAYER_LEFT') {
+                console.log('PLAYER_LEFT');
 
-                    if (!onlinePlayers[data.sessionId]) {
+                if (onlinePlayers[data.sessionId]) {
+                    onlinePlayers[data.sessionId].destroy();
+                    delete onlinePlayers[data.sessionId];
+                }
+            }
+            if (data.event === 'PLAYER_MOVED') {
+                //console.log('PLAYER_MOVED');
+
+                // If player is in same map
+                if (this.mapName === onlinePlayers[data.sessionId].map) {
+
+                    // If player isn't registered in this scene (map changing bug..)
+                    if (!onlinePlayers[data.sessionId].scene) {
                         onlinePlayers[data.sessionId] = new OnlinePlayer({
                             scene: this,
                             playerId: data.sessionId,
@@ -55,77 +84,92 @@ export class Scene2 extends Phaser.Scene {
                             y: data.y
                         });
                     }
+                    // Start animation and set sprite position
+                    onlinePlayers[data.sessionId].isWalking(data.position, data.x, data.y);
                 }
-                if (data.event === 'PLAYER_LEFT') {
-                    console.log('PLAYER_LEFT');
+            }
+            if (data.event === 'PLAYER_MOVEMENT_ENDED') {
+                // If player is in same map
+                if (this.mapName === onlinePlayers[data.sessionId].map) {
 
-                    if (onlinePlayers[data.sessionId]) {
-                        onlinePlayers[data.sessionId].destroy();
-                        delete onlinePlayers[data.sessionId];
+                    // If player isn't registered in this scene (map changing bug..)
+                    if (!onlinePlayers[data.sessionId].scene) {
+                        onlinePlayers[data.sessionId] = new OnlinePlayer({
+                            scene: this,
+                            playerId: data.sessionId,
+                            key: data.sessionId,
+                            map: data.map,
+                            x: data.x,
+                            y: data.y
+                        });
                     }
+                    // Stop animation & set sprite texture
+                    onlinePlayers[data.sessionId].stopWalking(data.position)
                 }
-                if (data.event === 'PLAYER_MOVED') {
-                    //console.log('PLAYER_MOVED');
+            }
+            if (data.event === 'PLAYER_CHANGED_MAP') {
+                console.log('PLAYER_CHANGED_MAP');
 
-                    // If player is in same map
-                    if (this.mapName === onlinePlayers[data.sessionId].map) {
 
-                        // If player isn't registered in this scene (map changing bug..)
-                        if (!onlinePlayers[data.sessionId].scene) {
-                            onlinePlayers[data.sessionId] = new OnlinePlayer({
-                                scene: this,
-                                playerId: data.sessionId,
-                                key: data.sessionId,
-                                map: data.map,
-                                x: data.x,
-                                y: data.y
-                            });
-                        }
-                        // Start animation and set sprite position
-                        onlinePlayers[data.sessionId].isWalking(data.position, data.x, data.y);
+                if (onlinePlayers[data.sessionId]) {
+                    onlinePlayers[data.sessionId].destroy();
+
+                    this.mapName = data.map;
+
+                    if (data.map === this.mapName && !onlinePlayers[data.sessionId].scene) {
+                        onlinePlayers[data.sessionId] = new OnlinePlayer({
+                            scene: this,  // Make sure the scene is set properly
+                            playerId: data.sessionId,
+                            key: data.sessionId,
+                            map: data.map,
+                            x: data.x,
+                            y: data.y
+                        });
                     }
-                }
-                if (data.event === 'PLAYER_MOVEMENT_ENDED') {
-                    // If player is in same map
-                    if (this.mapName === onlinePlayers[data.sessionId].map) {
 
-                        // If player isn't registered in this scene (map changing bug..)
-                        if (!onlinePlayers[data.sessionId].scene) {
-                            onlinePlayers[data.sessionId] = new OnlinePlayer({
-                                scene: this,
-                                playerId: data.sessionId,
-                                key: data.sessionId,
-                                map: data.map,
-                                x: data.x,
-                                y: data.y
-                            });
-                        }
-                        // Stop animation & set sprite texture
-                        onlinePlayers[data.sessionId].stopWalking(data.position)
-                    }
                 }
-                if (data.event === 'PLAYER_CHANGED_MAP') {
-                    console.log('PLAYER_CHANGED_MAP');
+                // the issue rn is 
+                // lets say the first player goes to map 2 
+                // and then the second player goes to map 2 
+                // so the first player sees the second player
+                // but for the second player to see the first player he has to move
+                // to do this we can do the following:
 
-                    if (onlinePlayers[data.sessionId]) {
-                        onlinePlayers[data.sessionId].destroy();
 
-                        if (data.map === this.mapName && !onlinePlayers[data.sessionId].scene) {
-                            onlinePlayers[data.sessionId] = new OnlinePlayer({
-                                scene: this,
-                                playerId: data.sessionId,
-                                key: data.sessionId,
-                                map: data.map,
-                                x: data.x,
-                                y: data.y
-                            });
-                        }
-                    }
-                }
-            })
+
+                console.log('Current Map:', this.mapName);
+                console.log('New Map:', data.map);
+            }
+            // if (data.event === 'LOAD_PLAYERS') {
+            //     console.log('LOAD_PLAYERS');
+
+            //     // Handle the current players data
+            //     const players = data.players;
+
+            //     // Create an OnlinePlayer instance for each player
+            //     for (let sessionId in players) {
+            //         let playerData = players[sessionId];
+
+            //         // If the player is already registered in this scene, destroy the old player
+            //         if (onlinePlayers[sessionId]) {
+            //             onlinePlayers[sessionId].destroy();
+            //         }
+
+            //         // Create a new OnlinePlayer instance
+            //         onlinePlayers[sessionId] = new OnlinePlayer({
+            //             scene: this,
+            //             playerId: sessionId,
+            //             key: sessionId,
+            //             map: playerData.map,
+            //             x: playerData.x,
+            //             y: playerData.y
+            //         });
+            //     }
+            // }
+        })
         );
 
-        this.map = this.make.tilemap({key: this.mapName});
+        this.map = this.make.tilemap({ key: this.mapName });
 
         // Set current map Bounds
         this.scene.scene.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -140,7 +184,7 @@ export class Scene2 extends Phaser.Scene {
         this.grassLayer = this.map.createStaticLayer("Grass", tileset, 0, 0);
         this.aboveLayer = this.map.createStaticLayer("Above Player", tileset, 0, 0);
 
-        this.worldLayer.setCollisionByProperty({collides: true});
+        this.worldLayer.setCollisionByProperty({ collides: true });
 
         // By default, everything gets depth sorted on the screen in the order we created things. Here, we
         // want the "Above Player" layer to sit on top of the player, so we explicitly give it a depth.
@@ -176,7 +220,7 @@ export class Scene2 extends Phaser.Scene {
             .text(16, 16, "Arrow keys to move\nPress \"H\" to show hitboxes", {
                 font: "18px monospace",
                 fill: "#000000",
-                padding: {x: 20, y: 10},
+                padding: { x: 20, y: 10 },
                 backgroundColor: "#ffffff"
             })
             .setScrollFactor(0)
@@ -251,16 +295,16 @@ export class Scene2 extends Phaser.Scene {
 
         // Horizontal movement ended
         if (Phaser.Input.Keyboard.JustUp(cursors.left) === true) {
-            room.then((room) => room.send({event: "PLAYER_MOVEMENT_ENDED", position: 'left'}))
+            room.then((room) => room.send({ event: "PLAYER_MOVEMENT_ENDED", position: 'left' }))
         } else if (Phaser.Input.Keyboard.JustUp(cursors.right) === true) {
-            room.then((room) => room.send({event: "PLAYER_MOVEMENT_ENDED", position: 'right'}))
+            room.then((room) => room.send({ event: "PLAYER_MOVEMENT_ENDED", position: 'right' }))
         }
 
         // Vertical movement ended
         if (Phaser.Input.Keyboard.JustUp(cursors.up) === true) {
-            room.then((room) => room.send({event: "PLAYER_MOVEMENT_ENDED", position: 'back'}))
+            room.then((room) => room.send({ event: "PLAYER_MOVEMENT_ENDED", position: 'back' }))
         } else if (Phaser.Input.Keyboard.JustUp(cursors.down) === true) {
-            room.then((room) => room.send({event: "PLAYER_MOVEMENT_ENDED", position: 'front'}))
+            room.then((room) => room.send({ event: "PLAYER_MOVEMENT_ENDED", position: 'front' }))
         }
     }
 
@@ -280,7 +324,7 @@ export class Scene2 extends Phaser.Scene {
             } else {
                 // Otherwise, show debug graphics
                 this.physics.world.createDebugGraphic();
-    
+
                 // Create worldLayer collision graphic above the player, but below the help text
                 this.debugGraphic = this.add
                     .graphics()
