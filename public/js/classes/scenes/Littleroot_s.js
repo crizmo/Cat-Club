@@ -37,7 +37,7 @@ export default class Littleroot_s extends Phaser.Scene {
     this.config = new Config();
     // sound
 
-    this.input.keyboard.on('keydown_M', (e) => {
+    this.input.keyboard.on('keydown-M', (e) => {
       if (this.game.global.music.isPlaying) {
         this.game.global.music.pause();
       } else {
@@ -52,7 +52,7 @@ export default class Littleroot_s extends Phaser.Scene {
     this.scaleFactor = 2;
     this._drawTilemap();
     this.map.setCollisionBetween(0, 1);
-    this.input.keyboard.on('keydown_C', (e) => {
+    this.input.keyboard.on('keydown-C', (e) => {
         let a = this.collisionLayer.alpha;
         this.collisionLayer.alpha = -a + 0.5;
     });
