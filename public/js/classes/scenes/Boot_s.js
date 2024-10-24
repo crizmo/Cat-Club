@@ -13,9 +13,13 @@ export default class Boot_s extends Phaser.Scene {
     // tile atlas
     this.load.image('atlas_pokemon', './assets/atlases/atlas_pokemon.png');
     // male sprite
-    this.load.spritesheet('player', './assets/spritesheets/male_trainer.png', {
-      frameWidth: 16,
-      frameHeight: 24
+    // this.load.spritesheet('player', './assets/spritesheets/male_trainer.png', {
+    //   frameWidth: 16,
+    //   frameHeight: 24
+    // });
+    this.load.spritesheet('player', './assets/spritesheets/cats/cat_004.png', {
+      frameWidth: 32,
+      frameHeight: 32
     });
     // https://soundcloud.com/rsesoundtrack/littleroot-town
     this.load.audio('littleroot', './assets/sounds/littleroot-town.mp3');
@@ -37,7 +41,7 @@ export default class Boot_s extends Phaser.Scene {
       fontSize: '24px',
       fill: '#000000'
     });
-    
+
     this.input.keyboard.on('keydown-SPACE', (e) => {
       console.log('space');
       this.scene.start('Littleroot_s', 0);
@@ -63,14 +67,20 @@ export default class Boot_s extends Phaser.Scene {
 
   _makeAnims() {
     // animations Down, Left, Up, Down (mt > male trainer)
-    this.anims.create(this.config.anim(this.anims, 'D_mt', 'player',
-      [0, 1, 0, 2], 10));
-    this.anims.create(this.config.anim(this.anims, 'L_mt', 'player',
-      [6, 7, 6, 8], 10));
-    this.anims.create(this.config.anim(this.anims, 'U_mt', 'player',
-      [12, 13, 12, 14], 10));
-    this.anims.create(this.config.anim(this.anims, 'R_mt', 'player',
-      [18, 19, 18, 20], 10));
+    // this.anims.create(this.config.anim(this.anims, 'D_mt', 'player',
+    //   [0, 1, 0, 2], 10));
+    // this.anims.create(this.config.anim(this.anims, 'L_mt', 'player',
+    //   [6, 7, 6, 8], 10));
+    // this.anims.create(this.config.anim(this.anims, 'U_mt', 'player',
+    //   [12, 13, 12, 14], 10));
+    // this.anims.create(this.config.anim(this.anims, 'R_mt', 'player',
+    //   [18, 19, 18, 20], 10));
+
+    //       // animations Down, Left, Right, Up (mt > male trainer)
+    this.anims.create(this.config.anim(this.anims, 'D_mt', 'player', [0, 1, 0, 2], 10));
+    this.anims.create(this.config.anim(this.anims, 'L_mt', 'player', [3, 4, 3, 5], 10));
+    this.anims.create(this.config.anim(this.anims, 'R_mt', 'player', [6, 7, 6, 8], 10));
+    this.anims.create(this.config.anim(this.anims, 'U_mt', 'player', [9, 10, 9, 11], 10));
   }
 
 }

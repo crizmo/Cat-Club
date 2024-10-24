@@ -9,8 +9,9 @@ import Oldale_s from './classes/scenes/Oldale_s.js';
 let config = {
   type: Phaser.AUTO,
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.FIT, // changed from Phaser.Scale.RESIZE to Phaser.Scale.FIT
     parent: 'main',
+    autoCenter: Phaser.Scale.CENTER_BOTH, // added this line to center the game
     width: '100%',
     height: '100%',
   },
@@ -22,7 +23,7 @@ let config = {
       debug: false,
     },
   },
-  scene: [Boot_s, Littleroot_s, Oldale_s],
+  scene: [Boot_s, Littleroot_s, Oldale_s, Scene1],
   pixelArt: true,
   title: 'littleroot v0.3.0',
 };
